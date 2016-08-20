@@ -22,6 +22,7 @@
  */
 
 const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+type extendedString = string & { decodeUTF8: () => string };
 /**
  * Encode string into Base64, as defined by RFC 4648 [http://tools.ietf.org/html/rfc4648]
  * (instance method extending String object). As per RFC 4648, no newlines are added.
@@ -30,9 +31,21 @@ const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
  *                   conversion to base64; otherwise string is assumed to be 8-bit characters
  * @return           base64-encoded string
  */
-export function encodeBase64(utf8encode) {  // http://tools.ietf.org/html/rfc4648
+export function encodeBase64(utf8encode: boolean) {  // http://tools.ietf.org/html/rfc4648
   utf8encode = (typeof utf8encode === "undefined") ? false : utf8encode;
-  let o1, o2, o3, bits, h1, h2, h3, h4, e = [], pad = "", c, plain, coded;
+  let e     : Array<string> = [];
+  let pad   : string = "";
+  let o1    : number;
+  let o2    : number;
+  let o3    : number;
+  let bits  : number;
+  let h1    : number;
+  let h2    : number;
+  let h3    : number;
+  let h4    : number;
+  let c     : number;
+  let plain : string;
+  let coded : string;
 
   plain = utf8encode ? this.encodeUTF8() : this;
 
@@ -75,9 +88,21 @@ export function encodeBase64(utf8encode) {  // http://tools.ietf.org/html/rfc464
  *                   after conversion from base64
  * @return           decoded string
  */
-export function decodeBase64(utf8decode) {
+export function decodeBase64(utf8decode: boolean) {
   utf8decode = (typeof utf8decode === "undefined") ? false : utf8decode;
-  let o1, o2, o3, h1, h2, h3, h4, bits, d = [], plain, coded;
+  let e     : Array<string> = [];
+  let d     : Array<string>;
+  let pad   : string = "";
+  let o1    : number;
+  let o2    : number;
+  let o3    : number;
+  let bits  : number;
+  let plain : extendedString;
+  let coded : string;
+  let h1    : number;
+  let h2    : number;
+  let h3    : number;
+  let h4    : number;
 
   coded = utf8decode ? this.decodeUTF8() : this;
 
@@ -98,7 +123,7 @@ export function decodeBase64(utf8decode) {
     if (h4 === 0x40) d[c / 4] = String.fromCharCode(o1, o2);
     if (h3 === 0x40) d[c / 4] = String.fromCharCode(o1);
   }
-  plain = d.join("");  // join() is far faster than repeated string concatenation
+  plain = <extendedString>d.join("");  // join() is far faster than repeated string concatenation
 
   return utf8decode ? plain.decodeUTF8() : plain;
 }
@@ -116,14 +141,14 @@ export function encodeUTF8() {
   // than procedural approaches
   let str = this.replace(
     /[\u0080-\u07ff]/g,  // U+0080 - U+07FF => 2 bytes 110yyyyy, 10zzzzzz
-    function (c) {
+    function (c: string) {
       let cc = c.charCodeAt(0);
       return String.fromCharCode(0xc0 | cc >> 6, 0x80 | cc & 0x3f);
     }
   );
   str = str.replace(
     /[\u0800-\uffff]/g,  // U+0800 - U+FFFF => 3 bytes 1110xxxx, 10yyyyyy, 10zzzzzz
-    function (c) {
+    function (c: string) {
       let cc = c.charCodeAt(0);
       return String.fromCharCode(0xe0 | cc >> 12, 0x80 | cc >> 6 & 0x3F, 0x80 | cc & 0x3f);
     }
@@ -140,14 +165,14 @@ export function encodeUTF8() {
 export function decodeUTF8() {
   let str = this.replace(
     /[\u00c0-\u00df][\u0080-\u00bf]/g,                 // 2-byte chars
-    function (c) {  // (note parentheses for precence)
+    function (c: string) {  // (note parentheses for precence)
       let cc = (c.charCodeAt(0) & 0x1f) << 6 | c.charCodeAt(1) & 0x3f;
       return String.fromCharCode(cc);
     }
   );
   str = str.replace(
     /[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g,  // 3-byte chars
-    function (c) {  // (note parentheses for precence)
+    function (c: string) {  // (note parentheses for precence)
       let cc = ((c.charCodeAt(0) & 0x0f) << 12) | ((c.charCodeAt(1) & 0x3f) << 6) | (c.charCodeAt(2) & 0x3f);
       return String.fromCharCode(cc);
     }

@@ -21,9 +21,6 @@
 import * as str from "../Text/String";
 
 export class AES {
-  constructor() {
-
-  }
 
   /** Sbox is pre-computed multiplicative inverse in GF(2^8) used in SubBytes*/
   protected Sbox: Array<number> = [
@@ -60,11 +57,11 @@ export class AES {
     [0x36, 0x00, 0x00, 0x00]
   ];
 
-  protected Cipher(input, w) {
+  protected Cipher(input: Array<number>, w: Array<Array<number>>) {
     let Nb = 4;               // block size (in words): no of columns in state (fixed at 4 for AES)
     let Nr = w.length / Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
 
-    let state = [[], [], [], []];  // initialise 4xNb byte-array 'state' with input [§3.4]
+    let state: Array<Array<number>> = [[], [], [], []];  // initialise 4xNb byte-array 'state' with input [§3.4]
     for (let i = 0; i < 4 * Nb; i++) state[i % 4][Math.floor(i / 4)] = input[i];
 
     state = this.AddRoundKey(state, w, 0, Nb);
@@ -86,7 +83,7 @@ export class AES {
   }
 
   /** apply SBox to state S [§5.1.1] */
-  protected SubBytes(s, Nb) {
+  protected SubBytes(s: Array<Array<number>>, Nb: number) {
     for (let r = 0; r < 4; r++) {
       for (let c = 0; c < Nb; c++) s[r][c] = this.Sbox[s[r][c]];
     }
@@ -94,7 +91,7 @@ export class AES {
   }
 
   /** shift row r of state S left by r bytes [§5.1.2] */
-  protected ShiftRows(s, Nb) {
+  protected ShiftRows(s: Array<Array<number>>, Nb: number) {
     let t = new Array(4);
     for (let r = 1; r < 4; r++) {
       for (let c = 0; c < 4; c++) t[c] = s[r][(c + r) % Nb];  // shift into temp copy
@@ -104,7 +101,7 @@ export class AES {
   }
 
   /** combine bytes of each col of state S [§5.1.3] */
-  protected MixColumns(s, Nb) {
+  protected MixColumns(s: Array<Array<number>>, Nb: number) {
     for (let c = 0; c < 4; c++) {
       let a = new Array(4);  // 'a' is a copy of the current column from 's'
       let b = new Array(4);  // 'b' is a•{02} in GF(2^8)
@@ -122,7 +119,7 @@ export class AES {
   }
 
   /** xor Round Key into state S [§5.1.4] */
-  protected AddRoundKey(state, w, rnd, Nb) {
+  protected AddRoundKey(state: Array<Array<number>>, w: Array<Array<number>>, rnd: number, Nb: number) {
     for (let r = 0; r < 4; r++) {
       for (let c = 0; c < Nb; c++) state[r][c] ^= w[rnd * 4 + c][r];
     }
@@ -130,7 +127,7 @@ export class AES {
   }
 
   /** generate Key Schedule (byte-array Nr+1 x Nb) from Key [§5.2] */
-  protected KeyExpansion(key) {
+  protected KeyExpansion(key: Array<number>) {
     let Nb = 4;            // block size (in words): no of columns in state (fixed at 4 for AES)
     let Nk = key.length / 4;  // key length (in words): 4/6/8 for 128/192/256-bit keys
     let Nr = Nk + 6;       // no of rounds: 10/12/14 for 128/192/256-bit keys
@@ -159,13 +156,13 @@ export class AES {
   }
 
   /** apply SBox to 4-byte word w */
-  protected SubWord(w) {
+  protected SubWord(w: Array<number>) {
     for (let i = 0; i < 4; i++) w[i] = this.Sbox[w[i]];
     return w;
   }
 
   /** rotate 4-byte word w left by one byte */
-  protected RotWord(w) {
+  protected RotWord(w: Array<number>) {
     let tmp = w[0];
     for (let i = 0; i < 3; i++) w[i] = w[i + 1];
     w[3] = tmp;
@@ -183,7 +180,7 @@ export class AES {
    * @param nBits     number of bits to be used in the key (128, 192, or 256)
    * @return          encrypted text
    */
-  protected encrypt(plaintext, password, nBits) {
+  protected encrypt(plaintext: string, password: string, nBits: number) {
     let blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
     if (!(nBits === 128 || nBits === 192 || nBits === 256)) return "";  // standard allows 128/192/256 bit keys
     plaintext = str.encodeUTF8.call(plaintext);
@@ -192,7 +189,7 @@ export class AES {
     // use AES itself to encrypt password to get cipher key (using plain password as source for key
     // expansion) - gives us well encrypted key
     let nBytes = nBits / 8;  // no bytes in key
-    let pwBytes = new Array(nBytes);
+    let pwBytes = new Array<number>(nBytes);
     for (let i = 0; i < nBytes; i++) {
       pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
     }
@@ -252,7 +249,7 @@ export class AES {
    * @param nBits      number of bits to be used in the key (128, 192, or 256)
    * @return           decrypted text
    */
-  protected decrypt(ciphertext, password, nBits) {
+  protected decrypt(ciphertext: string | Array<string>, password: string, nBits: number) {
     let blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
     if (!(nBits === 128 || nBits === 192 || nBits === 256)) return "";  // standard allows 128/192/256 bit keys
     ciphertext = str.decodeBase64.call(ciphertext);
@@ -269,7 +266,7 @@ export class AES {
 
     // recover nonce from 1st 8 bytes of ciphertext
     let counterBlock = new Array(8);
-    let ctrTxt = ciphertext.slice(0, 8);
+    let ctrTxt = <string>ciphertext.slice(0, 8);
     for (let i = 0; i < 8; i++) counterBlock[i] = ctrTxt.charCodeAt(i);
 
     // generate key schedule
@@ -292,9 +289,9 @@ export class AES {
       let cipherCntr = this.Cipher(counterBlock, keySchedule);  // encrypt counter block
 
       let plaintxtByte = new Array(ciphertext[b].length);
-      for (let i = 0; i < ciphertext[b].length; i++) {
+      for (let i = 0; i < (<string>ciphertext)[b].length; i++) {
         // -- xor plaintxt with ciphered counter byte-by-byte --
-        plaintxtByte[i] = cipherCntr[i] ^ ciphertext[b].charCodeAt(i);
+        plaintxtByte[i] = cipherCntr[i] ^ (<Array<string>>ciphertext)[b].charCodeAt(i);
         plaintxtByte[i] = String.fromCharCode(plaintxtByte[i]);
       }
       plaintxt[b] = plaintxtByte.join("");
