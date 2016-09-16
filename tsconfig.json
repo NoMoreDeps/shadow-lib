@@ -5,6 +5,7 @@
         "noImplicitAny": true,
         "sourceMap": true,
         "declaration": true,
+        "noEmit": true,
         "rootDir": "./",
         "outDir": "./bin"
     },
