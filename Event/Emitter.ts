@@ -37,7 +37,7 @@ export class Emitter {
 
     Ids: number; // Ids auto increment
     parent: Emitter; // Parent emitter, optional
-  } = <any>{
+  } = {
     onPool: {},
     oncePool: {},
     Ids: 0,
@@ -128,8 +128,7 @@ export class Emitter {
           callback = params[0];
           break;
       }
-    }
-    else {
+    } else {
       eventName = params[0];
       callback = params[1];
       callbackId = params[2] || void 0;
@@ -167,8 +166,7 @@ export class Emitter {
         this._Emitter_.oncePool[eventName] =
           this._Emitter_.oncePool[eventName].filter(pFct => pFct.id !== fct.id);
       });
-    }
-    else {
+    } else {
       for (eventName in this._Emitter_.onPool) {
         if (this._Emitter_.onPool.hasOwnProperty(eventName)) {
           let pool = this._Emitter_.onPool[eventName] || [];

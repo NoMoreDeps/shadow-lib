@@ -104,10 +104,12 @@ System.register([], function(exports_1, context_1) {
             o3 = bits & 0xff;
             d[c / 4] = String.fromCharCode(o1, o2, o3);
             // check for padding
-            if (h4 === 0x40)
+            if (h4 === 0x40) {
                 d[c / 4] = String.fromCharCode(o1, o2);
-            if (h3 === 0x40)
+            }
+            if (h3 === 0x40) {
                 d[c / 4] = String.fromCharCode(o1);
+            }
         }
         plain = d.join(""); // join() is far faster than repeated string concatenation
         return utf8decode ? plain.decodeUTF8() : plain;

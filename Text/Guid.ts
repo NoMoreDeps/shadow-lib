@@ -59,7 +59,10 @@ export class Guid {
         this._Guid_.part3.toString(16).substring(1) + "-" +
         this._Guid_.part4.toString(16).substring(1) + "-" +
         this._Guid_.part5.toString(16).substring(1) + "-" +
-        this._Guid_.part6[0].toString(16).substring(1) + this._Guid_.part6[1].toString(16).substring(1) + this._Guid_.part6[2].toString(16).substring(1);
+        this._Guid_.part6[0].toString(16).substring(1)
+          + this._Guid_.part6[1].toString(16).substring(1)
+          + this._Guid_.part6[2].toString(16).substring(1)
+        ;
     }
 
     return this._Guid_.toString;

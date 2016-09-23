@@ -121,8 +121,12 @@ export function decodeBase64(utf8decode: boolean) {
 
     d[c / 4] = String.fromCharCode(o1, o2, o3);
     // check for padding
-    if (h4 === 0x40) d[c / 4] = String.fromCharCode(o1, o2);
-    if (h3 === 0x40) d[c / 4] = String.fromCharCode(o1);
+    if (h4 === 0x40) {
+      d[c / 4] = String.fromCharCode(o1, o2);
+    }
+    if (h3 === 0x40) {
+      d[c / 4] = String.fromCharCode(o1);
+    }
   }
   plain = <extendedString>d.join("");  // join() is far faster than repeated string concatenation
 

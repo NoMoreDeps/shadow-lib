@@ -19,7 +19,7 @@
 /**
  * Based on <Chris Veness> MIT licensed Work [www.movable-type.co.uk/scripts/aes.html]
  */
-import * as str from "Text/String";
+import * as str from "shadow-lib/Text/String";
 
 export class AES {
 

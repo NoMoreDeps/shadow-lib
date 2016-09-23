@@ -29,7 +29,6 @@
         ],
         "no-arg": true,
         "no-consecutive-blank-lines": true,
-        "no-any": true,
         "align": [
             "arguments"
         ],

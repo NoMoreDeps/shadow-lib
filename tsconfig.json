@@ -8,6 +8,10 @@
         "declarationDir": "types",
         "rootDir": "./",
         "outDir": "./bin",
+        "baseUrl" : "./",
+        "paths": {
+            "shadow-lib/Text/String" : ["./Text/String"]
+        },
         "pretty": true
     },
     "exclude": [
