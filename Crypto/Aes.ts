@@ -19,7 +19,7 @@
 /**
  * Based on <Chris Veness> MIT licensed Work [www.movable-type.co.uk/scripts/aes.html]
  */
-import * as str from "shadow-lib/Text/String";
+import * as str from "Text/String";
 
 export class AES {
 
@@ -290,7 +290,7 @@ export class AES {
       let cipherCntr = this.Cipher(counterBlock, keySchedule);  // encrypt counter block
 
       let plaintxtByte = new Array(ciphertext[b].length);
-      for (let i = 0; i < (<string>ciphertext)[b].length; i++) {
+      for (let i = 0; i < (<any>ciphertext)[b].length; i++) {
         // -- xor plaintxt with ciphered counter byte-by-byte --
         plaintxtByte[i] = cipherCntr[i] ^ (<Array<string>>ciphertext)[b].charCodeAt(i);
         plaintxtByte[i] = String.fromCharCode(plaintxtByte[i]);
