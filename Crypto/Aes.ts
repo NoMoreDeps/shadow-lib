@@ -19,7 +19,7 @@
 /**
  * Based on <Chris Veness> MIT licensed Work [www.movable-type.co.uk/scripts/aes.html]
  */
-import * as str from "shadow-lib/Text/String";
+import * as str from "../Text/String";
 
 export class AES {
 
@@ -271,7 +271,7 @@ export class AES {
 
     // Array.join is more efficient than repeated string concatenation
     let ciphertext = ctrTxt + ciphertxt.join("");
-    ciphertext = str.encodeBase64.call(ciphertext);  // encode in base64
+    ciphertext = str.encodeBase64.call(ciphertext, [true]);  // encode in base64
 
     return ciphertext;
   }
@@ -289,7 +289,7 @@ export class AES {
     if (!(nBits === 128 || nBits === 192 || nBits === 256)) {
       return "";
     }  // standard allows 128/192/256 bit keys
-    ciphertext = str.decodeBase64.call(ciphertext);
+    ciphertext = str.decodeBase64.call(ciphertext, [true]);
     password = str.encodeUTF8.call(password);
 
     // use AES to encrypt password (mirroring encrypt routine)

@@ -48,7 +48,7 @@ export function encodeBase64(utf8encode: boolean) {  // http://tools.ietf.org/ht
   let plain : string;
   let coded : string;
 
-  plain = utf8encode ? this.encodeUTF8() : this;
+  plain = utf8encode ? encodeUTF8.call(this) : this;
 
   c = plain.length % 3;  // pad string to length of multiple of 3
   if (c > 0) {
@@ -91,8 +91,7 @@ export function encodeBase64(utf8encode: boolean) {  // http://tools.ietf.org/ht
  */
 export function decodeBase64(utf8decode: boolean) {
   utf8decode = (typeof utf8decode === "undefined") ? false : utf8decode;
-  let e     : Array<string> = [];
-  let d     : Array<string>;
+  let d     : Array<string> = [];
   let pad   : string = "";
   let o1    : number;
   let o2    : number;
@@ -105,7 +104,7 @@ export function decodeBase64(utf8decode: boolean) {
   let h3    : number;
   let h4    : number;
 
-  coded = utf8decode ? this.decodeUTF8() : this;
+  coded = utf8decode ? decodeUTF8.call(this) : this;
 
   for (let c = 0; c < coded.length; c += 4) {  // unpack four hexets into three octets
     h1 = b64.indexOf(coded.charAt(c));
@@ -130,7 +129,7 @@ export function decodeBase64(utf8decode: boolean) {
   }
   plain = <extendedString>d.join("");  // join() is far faster than repeated string concatenation
 
-  return utf8decode ? plain.decodeUTF8() : plain;
+  return utf8decode ? decodeUTF8.call(plain) : plain;
 }
 
 /**
