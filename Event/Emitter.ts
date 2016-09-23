@@ -23,6 +23,9 @@ export interface EmitterDelegate {
   (data: any): void;
 }
 
+export interface EmitterAutoOff {
+  off: () => void;
+}
 /**
  * This class is used as a base class for all Emitters
  * @class Emitter
@@ -51,7 +54,7 @@ export class Emitter {
   * @param {EmitterDelegate} callback The callback
   @md
   */
-  on(eventName: string, callback: EmitterDelegate): number {
+  on(eventName: string, callback: EmitterDelegate): EmitterAutoOff {
     if (!this._Emitter_.onPool[eventName]) {
       this._Emitter_.onPool[eventName] = [];
     }
@@ -62,10 +65,9 @@ export class Emitter {
     };
 
     this._Emitter_.onPool[eventName].push(elt);
-
     this.emit("registerEvent", { eventName: eventName, callback: callback });
 
-    return elt.id;
+    return { off : () => this.off(elt.id) };
   }
 
   /**
@@ -74,7 +76,7 @@ export class Emitter {
    * @param {string} eventName The event name
    * @param {EmitterDelegate} callback The callback
    */
-  once(eventName: string, callback: EmitterDelegate): number {
+  once(eventName: string, callback: EmitterDelegate): EmitterAutoOff {
     if (!this._Emitter_.oncePool[eventName]) {
       this._Emitter_.oncePool[eventName] = [];
     }
@@ -88,10 +90,9 @@ export class Emitter {
     };
 
     this._Emitter_.oncePool[eventName].push(elt);
-
     this.emit("registerEvent", { eventName: eventName, callback: elt.callback });
 
-    return elt.id;
+    return { off : () => this.off(elt.id) };
   }
 
   /**
@@ -235,8 +236,7 @@ export class Emitter {
    */
   emitAsync(eventName: string, data: any = void 0): boolean {
     /**
-     * Couldn't call this.emit(...), the closure will cause an infinite loop
-     * if an inherited class overloads the Emit function.
+     * Couldn't call this.emit(...), the closure will cause an infinite loop if an inherited class overloads the Emit function.
      * */
     setTimeout(() => {
       this._Emitter_.onPool[eventName]
