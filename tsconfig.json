@@ -7,11 +7,12 @@
         "declaration": true,
         "declarationDir": "types",
         "rootDir": "./",
-        "pretty": true,
-        "outDir": "./bin"
+        "outDir": "./bin",
+        "pretty": true
     },
     "exclude": [
         "node_modules",
-        "types"
+        "types",
+        "bin"
     ]
 }
