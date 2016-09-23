@@ -45,6 +45,7 @@ System.register([], function(exports_1, context_1) {
                 @md
                 */
                 Emitter.prototype.on = function (eventName, callback) {
+                    var _this = this;
                     if (!this._Emitter_.onPool[eventName]) {
                         this._Emitter_.onPool[eventName] = [];
                     }
@@ -54,7 +55,7 @@ System.register([], function(exports_1, context_1) {
                     };
                     this._Emitter_.onPool[eventName].push(elt);
                     this.emit("registerEvent", { eventName: eventName, callback: callback });
-                    return elt.id;
+                    return { off: function () { return _this.off(elt.id); } };
                 };
                 /**
                  * Register a new event that could be fired only one time
@@ -77,7 +78,7 @@ System.register([], function(exports_1, context_1) {
                     };
                     this._Emitter_.oncePool[eventName].push(elt);
                     this.emit("registerEvent", { eventName: eventName, callback: elt.callback });
-                    return elt.id;
+                    return { off: function () { return _this.off(elt.id); } };
                 };
                 Emitter.prototype.off = function () {
                     var _this = this;
@@ -201,8 +202,7 @@ System.register([], function(exports_1, context_1) {
                     var _this = this;
                     if (data === void 0) { data = void 0; }
                     /**
-                     * Couldn't call this.emit(...), the closure will cause an infinite loop
-                     * if an inherited class overloads the Emit function.
+                     * Couldn't call this.emit(...), the closure will cause an infinite loop if an inherited class overloads the Emit function.
                      * */
                     setTimeout(function () {
                         _this._Emitter_.onPool[eventName]

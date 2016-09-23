@@ -21,6 +21,9 @@
 export interface EmitterDelegate {
     (data: any): void;
 }
+export interface EmitterAutoOff {
+    off: () => void;
+}
 /**
  * This class is used as a base class for all Emitters
  * @class Emitter
@@ -50,14 +53,14 @@ export declare class Emitter {
     * @param {EmitterDelegate} callback The callback
     @md
     */
-    on(eventName: string, callback: EmitterDelegate): number;
+    on(eventName: string, callback: EmitterDelegate): EmitterAutoOff;
     /**
      * Register a new event that could be fired only one time
      * @method once
      * @param {string} eventName The event name
      * @param {EmitterDelegate} callback The callback
      */
-    once(eventName: string, callback: EmitterDelegate): number;
+    once(eventName: string, callback: EmitterDelegate): EmitterAutoOff;
     /**
      * Unregister an event
      * @method off
