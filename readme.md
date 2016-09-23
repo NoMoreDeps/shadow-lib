@@ -8,7 +8,7 @@ Shadow Lib package contains usefull standalone helpers used in all shadow develo
   npm i --save git+https://github.com/fskorzec/shadow-lib.git
 ```
 
-### To use types
+### To use types in Module System
 
 ```javascript
 // Add the correct path for typings in your tsconfig.json
