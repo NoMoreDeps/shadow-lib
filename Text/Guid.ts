@@ -64,8 +64,6 @@ export class Guid {
           + this._Guid_.part6[2].toString(16).substring(1)
         ;
     }
-
     return this._Guid_.toString;
-
   }
 }

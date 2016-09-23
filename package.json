@@ -2,7 +2,6 @@
   "name": "shadow-lib",
   "version": "1.0.0",
   "description": "",
-  "main": "bin/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,10 +10,13 @@
     "url": "git+https://github.com/fskorzec/shadow-lib.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fskorzec/shadow-lib/issues"
   },
-  "types":"types/index.d.ts",
-  "homepage": "https://github.com/fskorzec/shadow-lib#readme"
+  "homepage": "https://github.com/fskorzec/shadow-lib#readme",
+  "devDependencies": {
+    "@types/jest": "^15.1.32",
+    "jest": "^15.1.1"
+  }
 }

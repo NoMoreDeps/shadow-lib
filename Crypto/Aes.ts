@@ -63,7 +63,9 @@ export class AES {
     let Nr = w.length / Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
 
     let state: Array<Array<number>> = [[], [], [], []];  // initialise 4xNb byte-array 'state' with input [§3.4]
-    for (let i = 0; i < 4 * Nb; i++) state[i % 4][Math.floor(i / 4)] = input[i];
+    for (let i = 0; i < 4 * Nb; i++) {
+      state[i % 4][Math.floor(i / 4)] = input[i];
+    };
 
     state = this.AddRoundKey(state, w, 0, Nb);
 
@@ -79,14 +81,18 @@ export class AES {
     state = this.AddRoundKey(state, w, Nr, Nb);
 
     let output = new Array(4 * Nb);  // convert state to 1-d array before returning [§3.4]
-    for (let i = 0; i < 4 * Nb; i++) output[i] = state[i % 4][Math.floor(i / 4)];
+    for (let i = 0; i < 4 * Nb; i++) {
+      output[i] = state[i % 4][Math.floor(i / 4)];
+    }
     return output;
   }
 
   /** apply SBox to state S [§5.1.1] */
   protected SubBytes(s: Array<Array<number>>, Nb: number) {
     for (let r = 0; r < 4; r++) {
-      for (let c = 0; c < Nb; c++) s[r][c] = this.Sbox[s[r][c]];
+      for (let c = 0; c < Nb; c++) {
+        s[r][c] = this.Sbox[s[r][c]];
+      }
     }
     return s;
   }
@@ -95,8 +101,12 @@ export class AES {
   protected ShiftRows(s: Array<Array<number>>, Nb: number) {
     let t = new Array(4);
     for (let r = 1; r < 4; r++) {
-      for (let c = 0; c < 4; c++) t[c] = s[r][(c + r) % Nb];  // shift into temp copy
-      for (let c = 0; c < 4; c++) s[r][c] = t[c];         // and copy back
+      for (let c = 0; c < 4; c++) {
+        t[c] = s[r][(c + r) % Nb];
+      } // shift into temp copy
+      for (let c = 0; c < 4; c++) {
+        s[r][c] = t[c];
+      }         // and copy back
     }          // note that this will work for Nb=4,5,6, but not 7,8 (always 4 for AES):
     return s;  // see fp.gladman.plus.com/cryptography_technology/rijndael/aes.spec.311.pdf
   }
@@ -122,7 +132,9 @@ export class AES {
   /** xor Round Key into state S [§5.1.4] */
   protected AddRoundKey(state: Array<Array<number>>, w: Array<Array<number>>, rnd: number, Nb: number) {
     for (let r = 0; r < 4; r++) {
-      for (let c = 0; c < Nb; c++) state[r][c] ^= w[rnd * 4 + c][r];
+      for (let c = 0; c < Nb; c++) {
+        state[r][c] ^= w[rnd * 4 + c][r];
+      }
     }
     return state;
   }
@@ -143,14 +155,20 @@ export class AES {
 
     for (let i = Nk; i < (Nb * (Nr + 1)); i++) {
       w[i] = new Array(4);
-      for (let t = 0; t < 4; t++) temp[t] = w[i - 1][t];
+      for (let t = 0; t < 4; t++) {
+        temp[t] = w[i - 1][t];
+      }
       if (i % Nk === 0) {
         temp = this.SubWord(this.RotWord(temp));
-        for (let t = 0; t < 4; t++) temp[t] ^= this.Rcon[i / Nk][t];
+        for (let t = 0; t < 4; t++) {
+          temp[t] ^= this.Rcon[i / Nk][t];
+        }
       } else if (Nk > 6 && i % Nk === 4) {
         temp = this.SubWord(temp);
       }
-      for (let t = 0; t < 4; t++) w[i][t] = w[i - Nk][t] ^ temp[t];
+      for (let t = 0; t < 4; t++) {
+        w[i][t] = w[i - Nk][t] ^ temp[t];
+      }
     }
 
     return w;
@@ -158,14 +176,18 @@ export class AES {
 
   /** apply SBox to 4-byte word w */
   protected SubWord(w: Array<number>) {
-    for (let i = 0; i < 4; i++) w[i] = this.Sbox[w[i]];
+    for (let i = 0; i < 4; i++) {
+      w[i] = this.Sbox[w[i]];
+    }
     return w;
   }
 
   /** rotate 4-byte word w left by one byte */
   protected RotWord(w: Array<number>) {
     let tmp = w[0];
-    for (let i = 0; i < 3; i++) w[i] = w[i + 1];
+    for (let i = 0; i < 3; i++) {
+      w[i] = w[i + 1];
+    }
     w[3] = tmp;
     return w;
   }
@@ -183,7 +205,9 @@ export class AES {
    */
   protected encrypt(plaintext: string, password: string, nBits: number) {
     let blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-    if (!(nBits === 128 || nBits === 192 || nBits === 256)) return "";  // standard allows 128/192/256 bit keys
+    if (!(nBits === 128 || nBits === 192 || nBits === 256)) {
+      return "";
+    }  // standard allows 128/192/256 bit keys
     plaintext = str.encodeUTF8.call(plaintext);
     password = str.encodeUTF8.call(password);
 
@@ -204,11 +228,17 @@ export class AES {
     let nonceSec = Math.floor(nonce / 1000);
     let nonceMs = nonce % 1000;
     // encode nonce with seconds in 1st 4 bytes, and (repeated) ms part filling 2nd 4 bytes
-    for (let i = 0; i < 4; i++) counterBlock[i] = (nonceSec >>> i * 8) & 0xff;
-    for (let i = 0; i < 4; i++) counterBlock[i + 4] = nonceMs & 0xff;
+    for (let i = 0; i < 4; i++) {
+      counterBlock[i] = (nonceSec >>> i * 8) & 0xff;
+    }
+    for (let i = 0; i < 4; i++) {
+      counterBlock[i + 4] = nonceMs & 0xff;
+    }
     // and convert it to a string to go on the front of the ciphertext
     let ctrTxt = "";
-    for (let i = 0; i < 8; i++) ctrTxt += String.fromCharCode(counterBlock[i]);
+    for (let i = 0; i < 8; i++) {
+      ctrTxt += String.fromCharCode(counterBlock[i]);
+    }
 
     // generate key schedule - an expansion of the key into distinct Key Rounds for each round
     let keySchedule = this.KeyExpansion(key);
@@ -219,8 +249,12 @@ export class AES {
     for (let b = 0; b < blockCount; b++) {
       // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
       // done in two stages for 32-bit ops: using two words allows us to go past 2^32 blocks (68GB)
-      for (let c = 0; c < 4; c++) counterBlock[15 - c] = (b >>> c * 8) & 0xff;
-      for (let c = 0; c < 4; c++) counterBlock[15 - c - 4] = (b / 0x100000000 >>> c * 8);
+      for (let c = 0; c < 4; c++) {
+        counterBlock[15 - c] = (b >>> c * 8) & 0xff;
+      }
+      for (let c = 0; c < 4; c++) {
+        counterBlock[15 - c - 4] = (b / 0x100000000 >>> c * 8);
+      }
 
       let cipherCntr = this.Cipher(counterBlock, keySchedule);  // -- encrypt counter block --
 
@@ -252,7 +286,9 @@ export class AES {
    */
   protected decrypt(ciphertext: string | Array<string>, password: string, nBits: number) {
     let blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-    if (!(nBits === 128 || nBits === 192 || nBits === 256)) return "";  // standard allows 128/192/256 bit keys
+    if (!(nBits === 128 || nBits === 192 || nBits === 256)) {
+      return "";
+    }  // standard allows 128/192/256 bit keys
     ciphertext = str.decodeBase64.call(ciphertext);
     password = str.encodeUTF8.call(password);
 
@@ -268,7 +304,9 @@ export class AES {
     // recover nonce from 1st 8 bytes of ciphertext
     let counterBlock = new Array(8);
     let ctrTxt = <string>ciphertext.slice(0, 8);
-    for (let i = 0; i < 8; i++) counterBlock[i] = ctrTxt.charCodeAt(i);
+    for (let i = 0; i < 8; i++) {
+      counterBlock[i] = ctrTxt.charCodeAt(i);
+    }
 
     // generate key schedule
     let keySchedule = this.KeyExpansion(key);
@@ -276,7 +314,9 @@ export class AES {
     // separate ciphertext into blocks (skipping past initial 8 bytes)
     let nBlocks = Math.ceil((ciphertext.length - 8) / blockSize);
     let ct = new Array(nBlocks);
-    for (let b = 0; b < nBlocks; b++) ct[b] = ciphertext.slice(8 + b * blockSize, 8 + b * blockSize + blockSize);
+    for (let b = 0; b < nBlocks; b++) {
+      ct[b] = ciphertext.slice(8 + b * blockSize, 8 + b * blockSize + blockSize);
+    }
     ciphertext = ct;  // ciphertext is now array of block-length strings
 
     // plaintext will get generated block-by-block into array of block-length strings
@@ -284,8 +324,12 @@ export class AES {
 
     for (let b = 0; b < nBlocks; b++) {
       // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
-      for (let c = 0; c < 4; c++) counterBlock[15 - c] = ((b) >>> c * 8) & 0xff;
-      for (let c = 0; c < 4; c++) counterBlock[15 - c - 4] = (((b + 1) / 0x100000000 - 1) >>> c * 8) & 0xff;
+      for (let c = 0; c < 4; c++) {
+        counterBlock[15 - c] = ((b) >>> c * 8) & 0xff;
+      }
+      for (let c = 0; c < 4; c++) {
+        counterBlock[15 - c - 4] = (((b + 1) / 0x100000000 - 1) >>> c * 8) & 0xff;
+      }
 
       let cipherCntr = this.Cipher(counterBlock, keySchedule);  // encrypt counter block
 

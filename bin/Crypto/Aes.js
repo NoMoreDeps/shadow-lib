@@ -66,8 +66,10 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                     var Nb = 4; // block size (in words): no of columns in state (fixed at 4 for AES)
                     var Nr = w.length / Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
                     var state = [[], [], [], []]; // initialise 4xNb byte-array 'state' with input [§3.4]
-                    for (var i = 0; i < 4 * Nb; i++)
+                    for (var i = 0; i < 4 * Nb; i++) {
                         state[i % 4][Math.floor(i / 4)] = input[i];
+                    }
+                    ;
                     state = this.AddRoundKey(state, w, 0, Nb);
                     for (var round = 1; round < Nr; round++) {
                         state = this.SubBytes(state, Nb);
@@ -79,15 +81,17 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                     state = this.ShiftRows(state, Nb);
                     state = this.AddRoundKey(state, w, Nr, Nb);
                     var output = new Array(4 * Nb); // convert state to 1-d array before returning [§3.4]
-                    for (var i = 0; i < 4 * Nb; i++)
+                    for (var i = 0; i < 4 * Nb; i++) {
                         output[i] = state[i % 4][Math.floor(i / 4)];
+                    }
                     return output;
                 };
                 /** apply SBox to state S [§5.1.1] */
                 AES.prototype.SubBytes = function (s, Nb) {
                     for (var r = 0; r < 4; r++) {
-                        for (var c = 0; c < Nb; c++)
+                        for (var c = 0; c < Nb; c++) {
                             s[r][c] = this.Sbox[s[r][c]];
+                        }
                     }
                     return s;
                 };
@@ -95,10 +99,12 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                 AES.prototype.ShiftRows = function (s, Nb) {
                     var t = new Array(4);
                     for (var r = 1; r < 4; r++) {
-                        for (var c = 0; c < 4; c++)
-                            t[c] = s[r][(c + r) % Nb]; // shift into temp copy
-                        for (var c = 0; c < 4; c++)
-                            s[r][c] = t[c]; // and copy back
+                        for (var c = 0; c < 4; c++) {
+                            t[c] = s[r][(c + r) % Nb];
+                        } // shift into temp copy
+                        for (var c = 0; c < 4; c++) {
+                            s[r][c] = t[c];
+                        } // and copy back
                     } // note that this will work for Nb=4,5,6, but not 7,8 (always 4 for AES):
                     return s; // see fp.gladman.plus.com/cryptography_technology/rijndael/aes.spec.311.pdf
                 };
@@ -122,8 +128,9 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                 /** xor Round Key into state S [§5.1.4] */
                 AES.prototype.AddRoundKey = function (state, w, rnd, Nb) {
                     for (var r = 0; r < 4; r++) {
-                        for (var c = 0; c < Nb; c++)
+                        for (var c = 0; c < Nb; c++) {
                             state[r][c] ^= w[rnd * 4 + c][r];
+                        }
                     }
                     return state;
                 };
@@ -140,32 +147,37 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                     }
                     for (var i = Nk; i < (Nb * (Nr + 1)); i++) {
                         w[i] = new Array(4);
-                        for (var t = 0; t < 4; t++)
+                        for (var t = 0; t < 4; t++) {
                             temp[t] = w[i - 1][t];
+                        }
                         if (i % Nk === 0) {
                             temp = this.SubWord(this.RotWord(temp));
-                            for (var t = 0; t < 4; t++)
+                            for (var t = 0; t < 4; t++) {
                                 temp[t] ^= this.Rcon[i / Nk][t];
+                            }
                         }
                         else if (Nk > 6 && i % Nk === 4) {
                             temp = this.SubWord(temp);
                         }
-                        for (var t = 0; t < 4; t++)
+                        for (var t = 0; t < 4; t++) {
                             w[i][t] = w[i - Nk][t] ^ temp[t];
+                        }
                     }
                     return w;
                 };
                 /** apply SBox to 4-byte word w */
                 AES.prototype.SubWord = function (w) {
-                    for (var i = 0; i < 4; i++)
+                    for (var i = 0; i < 4; i++) {
                         w[i] = this.Sbox[w[i]];
+                    }
                     return w;
                 };
                 /** rotate 4-byte word w left by one byte */
                 AES.prototype.RotWord = function (w) {
                     var tmp = w[0];
-                    for (var i = 0; i < 3; i++)
+                    for (var i = 0; i < 3; i++) {
                         w[i] = w[i + 1];
+                    }
                     w[3] = tmp;
                     return w;
                 };
@@ -182,8 +194,9 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                  */
                 AES.prototype.encrypt = function (plaintext, password, nBits) {
                     var blockSize = 16; // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-                    if (!(nBits === 128 || nBits === 192 || nBits === 256))
-                        return ""; // standard allows 128/192/256 bit keys
+                    if (!(nBits === 128 || nBits === 192 || nBits === 256)) {
+                        return "";
+                    } // standard allows 128/192/256 bit keys
                     plaintext = str.encodeUTF8.call(plaintext);
                     password = str.encodeUTF8.call(password);
                     // use AES itself to encrypt password to get cipher key (using plain password as source for key
@@ -202,14 +215,17 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                     var nonceSec = Math.floor(nonce / 1000);
                     var nonceMs = nonce % 1000;
                     // encode nonce with seconds in 1st 4 bytes, and (repeated) ms part filling 2nd 4 bytes
-                    for (var i = 0; i < 4; i++)
+                    for (var i = 0; i < 4; i++) {
                         counterBlock[i] = (nonceSec >>> i * 8) & 0xff;
-                    for (var i = 0; i < 4; i++)
+                    }
+                    for (var i = 0; i < 4; i++) {
                         counterBlock[i + 4] = nonceMs & 0xff;
+                    }
                     // and convert it to a string to go on the front of the ciphertext
                     var ctrTxt = "";
-                    for (var i = 0; i < 8; i++)
+                    for (var i = 0; i < 8; i++) {
                         ctrTxt += String.fromCharCode(counterBlock[i]);
+                    }
                     // generate key schedule - an expansion of the key into distinct Key Rounds for each round
                     var keySchedule = this.KeyExpansion(key);
                     var blockCount = Math.ceil(plaintext.length / blockSize);
@@ -217,10 +233,12 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                     for (var b = 0; b < blockCount; b++) {
                         // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
                         // done in two stages for 32-bit ops: using two words allows us to go past 2^32 blocks (68GB)
-                        for (var c = 0; c < 4; c++)
+                        for (var c = 0; c < 4; c++) {
                             counterBlock[15 - c] = (b >>> c * 8) & 0xff;
-                        for (var c = 0; c < 4; c++)
+                        }
+                        for (var c = 0; c < 4; c++) {
                             counterBlock[15 - c - 4] = (b / 0x100000000 >>> c * 8);
+                        }
                         var cipherCntr = this.Cipher(counterBlock, keySchedule); // -- encrypt counter block --
                         // block size is reduced on final block
                         var blockLength = b < blockCount - 1 ? blockSize : (plaintext.length - 1) % blockSize + 1;
@@ -246,8 +264,9 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                  */
                 AES.prototype.decrypt = function (ciphertext, password, nBits) {
                     var blockSize = 16; // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-                    if (!(nBits === 128 || nBits === 192 || nBits === 256))
-                        return ""; // standard allows 128/192/256 bit keys
+                    if (!(nBits === 128 || nBits === 192 || nBits === 256)) {
+                        return "";
+                    } // standard allows 128/192/256 bit keys
                     ciphertext = str.decodeBase64.call(ciphertext);
                     password = str.encodeUTF8.call(password);
                     // use AES to encrypt password (mirroring encrypt routine)
@@ -261,24 +280,28 @@ System.register(["shadow-lib/Text/String"], function(exports_1, context_1) {
                     // recover nonce from 1st 8 bytes of ciphertext
                     var counterBlock = new Array(8);
                     var ctrTxt = ciphertext.slice(0, 8);
-                    for (var i = 0; i < 8; i++)
+                    for (var i = 0; i < 8; i++) {
                         counterBlock[i] = ctrTxt.charCodeAt(i);
+                    }
                     // generate key schedule
                     var keySchedule = this.KeyExpansion(key);
                     // separate ciphertext into blocks (skipping past initial 8 bytes)
                     var nBlocks = Math.ceil((ciphertext.length - 8) / blockSize);
                     var ct = new Array(nBlocks);
-                    for (var b = 0; b < nBlocks; b++)
+                    for (var b = 0; b < nBlocks; b++) {
                         ct[b] = ciphertext.slice(8 + b * blockSize, 8 + b * blockSize + blockSize);
+                    }
                     ciphertext = ct; // ciphertext is now array of block-length strings
                     // plaintext will get generated block-by-block into array of block-length strings
                     var plaintxt = new Array(ciphertext.length);
                     for (var b = 0; b < nBlocks; b++) {
                         // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
-                        for (var c = 0; c < 4; c++)
+                        for (var c = 0; c < 4; c++) {
                             counterBlock[15 - c] = ((b) >>> c * 8) & 0xff;
-                        for (var c = 0; c < 4; c++)
+                        }
+                        for (var c = 0; c < 4; c++) {
                             counterBlock[15 - c - 4] = (((b + 1) / 0x100000000 - 1) >>> c * 8) & 0xff;
+                        }
                         var cipherCntr = this.Cipher(counterBlock, keySchedule); // encrypt counter block
                         var plaintxtByte = new Array(ciphertext[b].length);
                         for (var i = 0; i < ciphertext[b].length; i++) {
