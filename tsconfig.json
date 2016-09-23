@@ -5,8 +5,8 @@
         "noImplicitAny": true,
         "sourceMap": true,
         "declaration": true,
-        "noEmit": true,
         "rootDir": "./",
+        "declarationDir": "typings",
         "outDir": "./bin"
     },
     "exclude": [
