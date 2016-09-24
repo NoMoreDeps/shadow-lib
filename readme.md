@@ -68,3 +68,46 @@ let str = guid.toString();
 // As a shortcut, you can invoke the static method
 let str2 = Guid.getGuid();
 ```
+
+### Emitter package
+```typescript
+/**
+ * Import the package
+ */
+import {Emitter} from "shadow-lib/Event/Emitter";
+
+// Instanciate an emitter
+let emitter = new Emitter();
+
+// Register an event with a lambda
+emitter.on("TEST", () => {
+  // ...
+});
+
+// Or with a named function
+let test3 = () => {
+  // ...
+};
+emitter.on("TEST 3", test3);
+
+// Register a single use event
+let onceHandler = emitter.once("TEST 2", () => {
+  // ...
+});
+
+// Then emit a sync event
+emitter.emit("TEST", "DATA");
+
+// Or an async version
+emitter.emitAsync("TEST", "DATA");
+
+// Unregister all delegates associated to the event
+emitter.off("TEST");
+
+// Unregsiter a specific anonymous delegate
+onceHandler.off();
+
+// Unregister a specific delegate
+emitter.off(test3);
+
+```
