@@ -22,17 +22,28 @@
  */
 export class Guid {
 
-  _Guid_: {
-    part1    : number;
-    part2    : number;
-    part3    : number;
-    part4    : number;
-    part5    : number;
-    toString : string;
-    part6    : Array<number>;
+  /**
+   * Internal field that contains all Guid parts
+   * @scope {protected}
+   * @field {any} _Guid_
+   */
+  protected _Guid_: {
+    part1: number;
+    part2: number;
+    part3: number;
+    part4: number;
+    part5: number;
+    toString: string;
+    part6: Array<number>;
   };
 
-  _Guid_Init(): void {
+  /**
+   * Init method
+   * @scope {protected}
+   * @method _Guid_Init
+   * @return {void}
+   */
+  protected _Guid_Init(): void {
     let gen = (): number => {
       return ((1 + Math.random()) * 0x10000) >> 0;
     };
@@ -48,10 +59,60 @@ export class Guid {
     };
   }
 
+  /**
+   * @constructor
+   */
   constructor() {
     this._Guid_Init();
   }
 
+  /**
+   * Gets the part1
+   */
+  get part1(): number {
+    return this._Guid_.part1;
+  }
+
+  /**
+   * Gets the part2
+   */
+  get part2(): number {
+    return this._Guid_.part2;
+  }
+
+  /**
+   * Gets the part3
+   */
+  get part3(): number {
+    return this._Guid_.part3;
+  }
+
+  /**
+   * Gets the part 4
+   */
+  get part4(): number {
+    return this._Guid_.part4;
+  }
+
+  /**
+   * Gets the part 5
+   */
+  get part5(): number {
+    return this._Guid_.part5;
+  }
+
+  /**
+   * Gets the part 6
+   */
+  get part6(): Array<number> {
+    return this._Guid_.part6;
+  }
+
+  /**
+   * Gets a string representation of the Guid
+   * @method toString
+   * @return {string}
+   */
   toString() {
     if (this._Guid_.toString.length === 0) {
       this._Guid_.toString = this._Guid_.part1.toString(16).substring(1) + "-" +
@@ -60,10 +121,24 @@ export class Guid {
         this._Guid_.part4.toString(16).substring(1) + "-" +
         this._Guid_.part5.toString(16).substring(1) + "-" +
         this._Guid_.part6[0].toString(16).substring(1)
-          + this._Guid_.part6[1].toString(16).substring(1)
-          + this._Guid_.part6[2].toString(16).substring(1)
+        + this._Guid_.part6[1].toString(16).substring(1)
+        + this._Guid_.part6[2].toString(16).substring(1)
         ;
     }
     return this._Guid_.toString;
+  }
+
+  /**
+   * Gets a string Guid without a Guid Object
+   * @static
+   * @method getGuid
+   * @return {string}
+   */
+  static getGuid(): string {
+    let gen = (): string => {
+      return (((1 + Math.random()) * 0x10000) >> 0).toString(16).substring(1);
+    };
+
+    return `${gen()}-${gen()}-${gen()}-${gen()}-${gen()}-${gen() + gen() + gen()}`;
   }
 }

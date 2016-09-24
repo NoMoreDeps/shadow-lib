@@ -22,25 +22,49 @@ Shadow Lib package contains usefull standalone helpers used in all shadow develo
 }
 ```
 
-### What will you find ;-) ?
+### AES package
 
 ```typescript
-  /**
-  * AES package allows to encode and decode string with a 128 | 192 | 256 bits encoding
-  * */
+/**
+* Import the package
+*/
+import {AES} from "shadow-lib/Crypto/Aes";
 
-  /**
-  * Emitter package allows the use of an Emitter with on / once registering function
-  * and emit / emitAsync actions
-  * */
+// Instanciate the AES class
+let crypto = new AES();
 
-  /**
-  * Guid package let you generate a valid Guid
-  * */
+// Set the input text to encrypt
+let inputText = "Foo bar";
 
-  /**
-  * String package is used in AES package and exposes String prototypes for
-  * base64 encoding / decoding
-  * utf8 encoding / decoding
-  * */
+// Set your password phrase
+let password  = "*******";
+
+// Now in order to encrypt your text
+// You have to choose beetween a 128 | 192 | 256 bits based encryption
+let encrypted128BitText = crypto.to128(inputText, password);
+let encrypted192BitText = crypto.to192(inputText, password);
+let encrypted256BitText = crypto.to256(inputText, password);
+
+// At the opposite, if you want to uncrypt, you will proceed the the following
+let uncrypted128BitText = crypto.from128(encrypted128BitText, password);
+```
+
+### Guid package
+```typescript
+/**
+ * Import the package
+ */
+import {Guid} from "shadow-lib/Text/Guid";
+
+// Instanciate a new Guid object
+let guid = new Guid();
+
+// Gets a specific part (from 1 to 6)
+console.log(guid.part1);
+
+// Gets the string representation
+let str = guid.toString();
+
+// As a shortcut, you can invoke the static method
+let str2 = Guid.getGuid();
 ```

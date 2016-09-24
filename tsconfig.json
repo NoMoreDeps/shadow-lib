@@ -10,6 +10,7 @@
         "outDir": "./bin",
         "baseUrl" : "./",
         "paths": {
+            "shadow-lib/Text/Guid" : ["./Text/Guid"],
             "shadow-lib/Text/String" : ["./Text/String"]
         },
         "pretty": true
