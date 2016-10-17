@@ -26,6 +26,9 @@ export interface EmitterDelegate {
 export interface EmitterAutoOff {
   off: () => void;
 }
+
+export type OnPoolType   = Array<{ id: number, callback: EmitterDelegate }>;
+export type OncePoolType = Array<{ id: number, callback: EmitterDelegate,  originalCallback: EmitterDelegate}>;
 /**
  * This class is used as a base class for all Emitters
  * @class Emitter
@@ -35,16 +38,16 @@ export class Emitter {
 
   // Internal fields
   protected _Emitter_: {
-    onPool: { [eventName: string]: Array<{ id: number, callback: EmitterDelegate }> }; // on collection
-    oncePool: { [eventName: string]: Array<{ id: number, callback: EmitterDelegate }> }; // once collection
+    onPool   :  { [eventName: string]: OnPoolType }  ; // on collection
+    oncePool :  { [eventName: string]: OncePoolType} ; // once collection
 
-    Ids: number; // Ids auto increment
-    parent: Emitter; // Parent emitter, optional
+    Ids    : number  ; // Ids auto increment
+    parent : Emitter ; // Parent emitter, optional
   } = {
-    onPool: {},
-    oncePool: {},
-    Ids: 0,
-    parent: void 0
+    oncePool : {}     ,
+    onPool   : {}     ,
+    parent   : void 0 ,
+    Ids      : 0
   };
 
   /**
@@ -87,6 +90,7 @@ export class Emitter {
         this.off(elt.id);
         callback(data);
       }
+      , originalCallback : callback
     };
 
     this._Emitter_.oncePool[eventName].push(elt);
@@ -140,7 +144,7 @@ export class Emitter {
     }
 
     if (eventName) {
-      let pool = this._Emitter_.onPool[eventName] || [];
+      let pool : OnPoolType | OncePoolType = this._Emitter_.onPool[eventName] || [];
       if (callbackId) {
         pool = pool.filter(fct => fct.id === callbackId);
       }
@@ -156,14 +160,14 @@ export class Emitter {
 
       pool = this._Emitter_.oncePool[eventName] || [];
       if (callbackId) {
-        pool = pool.filter(fct => fct.id === callbackId);
+        pool = (pool as OncePoolType).filter(fct => fct.id === callbackId);
       }
 
       if (callback) {
-        pool = pool.filter(fct => fct.callback === callback);
+        pool = (pool as OncePoolType).filter(fct => fct.originalCallback === callback);
       }
 
-      pool.forEach(fct => {
+      (pool as OncePoolType).forEach(fct => {
         this._Emitter_.oncePool[eventName] =
           this._Emitter_.oncePool[eventName].filter(pFct => pFct.id !== fct.id);
       });
