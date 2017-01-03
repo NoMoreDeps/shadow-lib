@@ -67,8 +67,8 @@ export function encodeBase64(utf8encode: boolean) {  // http://tools.ietf.org/ht
 
     h1 = bits >> 18 & 0x3f;
     h2 = bits >> 12 & 0x3f;
-    h3 = bits >> 6 & 0x3f;
-    h4 = bits & 0x3f;
+    h3 = bits >> 6  & 0x3f;
+    h4 = bits       & 0x3f;
 
     // use hextets to index into b64 string
     e[c / 3] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);

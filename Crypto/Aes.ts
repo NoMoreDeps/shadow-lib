@@ -17,7 +17,7 @@
  */
 
 /**
- * Based on <Chris Veness> MIT licensed Work [www.movable-type.co.uk/scripts/aes.html]
+ * Based on the JS version by <Chris Veness> MIT licensed Work [www.movable-type.co.uk/scripts/aes.html]
  */
 import * as str from "../Text/String";
 
@@ -59,7 +59,7 @@ export class AES {
   ];
 
   protected Cipher(input: Array<number>, w: Array<Array<number>>) {
-    let Nb = 4;               // block size (in words): no of columns in state (fixed at 4 for AES)
+    let Nb = 4;                 // block size (in words): no of columns in state (fixed at 4 for AES)
     let Nr = w.length / Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
 
     let state: Array<Array<number>> = [[], [], [], []];  // initialise 4xNb byte-array 'state' with input [§3.4]

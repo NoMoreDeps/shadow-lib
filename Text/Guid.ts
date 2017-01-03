@@ -28,13 +28,13 @@ export class Guid {
    * @field {any} _Guid_
    */
   protected _Guid_: {
-    part1: number;
-    part2: number;
-    part3: number;
-    part4: number;
-    part5: number;
-    toString: string;
-    part6: Array<number>;
+    toString : string       ;
+    part1    : number       ;
+    part2    : number       ;
+    part3    : number       ;
+    part4    : number       ;
+    part5    : number       ;
+    part6    : Array<number>;
   };
 
   /**
