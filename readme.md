@@ -5,31 +5,9 @@ Shadow Lib package contains usefull standalone helpers used in all shadow develo
 ### Installation
 
 ```bash
-  npm i --save git+https://github.com/fskorzec/shadow-lib.git
-```
-
-If you want to use it as a dependency and test with a unit testing framework in commonjs target
-You will need to build the dependency as a commonjs package.
-Add a post Installation script
-
-```bash
-"postinstall": "tsc -p ./node_modules/shadow-lib --module commonjs --outDir ./node_modules/shadow-lib",
+  npm i --save shadow-lib
 ```
 <br />
-### To use types in Module System
-
-```javascript
-// Add the correct path for typings in your tsconfig.json
-{
-  ...
-  "baseUrl": "./",
-  "paths": {
-    "shadow-lib/*" : ["./node_modules/shadow-lib/types/*"]
-  },
-  ...
-}
-```
-
 ### AES package
 
 ```typescript
