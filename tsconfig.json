@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "system",
+        "module": "commonjs",
         "target": "es5",
         "noImplicitAny": true,
         "sourceMap": true,
@@ -8,11 +8,6 @@
         "declarationDir": "types",
         "rootDir": "./",
         "outDir": "./bin",
-        "baseUrl" : "./",
-        "paths": {
-            "shadow-lib/Event/Emitter" : ["./Event/Emitter"],
-            "shadow-lib/Text/String" : ["./Text/String"]
-        },
         "pretty": true
     },
     "exclude": [

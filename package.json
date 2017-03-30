@@ -1,21 +1,21 @@
 {
   "name": "shadow-lib",
   "version": "1.0.1",
-  "description": "",
+  "description": "Helpers for shadow developments",
   "scripts": {
-    "pretest": "tsc -p . --module commonjs",
+    "pretest":"tsc",
     "test": "jest --verbose"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fskorzec/shadow-lib.git"
+    "url": "git+http://labs.beewix.com/beewix-public/shadow-lib.git"
   },
-  "author": "",
+  "author": "François Skorzec",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fskorzec/shadow-lib/issues"
+    "url": "http://labs.beewix.com/beewix-public/shadow-lib/issues"
   },
-  "homepage": "https://github.com/fskorzec/shadow-lib#readme",
+  "homepage": "http://labs.beewix.com/beewix-public/shadow-lib",
   "devDependencies": {
     "@types/jest": "^15.1.1",
     "jest": "^15.1.1"

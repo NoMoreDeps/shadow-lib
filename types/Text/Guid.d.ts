@@ -20,16 +20,66 @@
  * @class Guid
  */
 export declare class Guid {
-    _Guid_: {
+    /**
+     * Internal field that contains all Guid parts
+     * @scope {protected}
+     * @field {any} _Guid_
+     */
+    protected _Guid_: {
+        toString: string;
         part1: number;
         part2: number;
         part3: number;
         part4: number;
         part5: number;
-        toString: string;
         part6: Array<number>;
     };
-    _Guid_Init(): void;
+    /**
+     * Init method
+     * @scope {protected}
+     * @method _Guid_Init
+     * @return {void}
+     */
+    protected _Guid_Init(): void;
+    /**
+     * @constructor
+     */
     constructor();
+    /**
+     * Gets the part1
+     */
+    readonly part1: number;
+    /**
+     * Gets the part2
+     */
+    readonly part2: number;
+    /**
+     * Gets the part3
+     */
+    readonly part3: number;
+    /**
+     * Gets the part 4
+     */
+    readonly part4: number;
+    /**
+     * Gets the part 5
+     */
+    readonly part5: number;
+    /**
+     * Gets the part 6
+     */
+    readonly part6: Array<number>;
+    /**
+     * Gets a string representation of the Guid
+     * @method toString
+     * @return {string}
+     */
     toString(): string;
+    /**
+     * Gets a string Guid without a Guid Object
+     * @static
+     * @method getGuid
+     * @return {string}
+     */
+    static getGuid(): string;
 }

@@ -24,6 +24,15 @@ export interface EmitterDelegate {
 export interface EmitterAutoOff {
     off: () => void;
 }
+export declare type OnPoolType = Array<{
+    id: number;
+    callback: EmitterDelegate;
+}>;
+export declare type OncePoolType = Array<{
+    id: number;
+    callback: EmitterDelegate;
+    originalCallback: EmitterDelegate;
+}>;
 /**
  * This class is used as a base class for all Emitters
  * @class Emitter
@@ -32,16 +41,10 @@ export interface EmitterAutoOff {
 export declare class Emitter {
     protected _Emitter_: {
         onPool: {
-            [eventName: string]: Array<{
-                id: number;
-                callback: EmitterDelegate;
-            }>;
+            [eventName: string]: OnPoolType;
         };
         oncePool: {
-            [eventName: string]: Array<{
-                id: number;
-                callback: EmitterDelegate;
-            }>;
+            [eventName: string]: OncePoolType;
         };
         Ids: number;
         parent: Emitter;
