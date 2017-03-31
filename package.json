@@ -1,6 +1,6 @@
 {
   "name": "shadow-lib",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Helpers for shadow developments",
   "main":"bin/Index",
   "files": [
