@@ -1,4 +1,5 @@
-import {Guid} from "../Text/Guid";
+import * as ShadowLib from "../Index";
+import Guid = ShadowLib.Text.Guid;
 
 describe("Test Guid", () => {
   it("Should be instanciated", () => {

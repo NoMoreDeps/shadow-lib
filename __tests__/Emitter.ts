@@ -1,4 +1,5 @@
-import { Emitter } from "../Event/Emitter";
+import * as ShadowLib from "../Index";
+import Emitter = ShadowLib.Event.Emitter;
 
 describe("Test Emitter", () => {
   it("Should be of type Emitter", () => {

@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Aes_1 = require("../Crypto/Aes");
+var ShadowLib = require("../Index");
+var AES = ShadowLib.Crypto.AES;
 var originalPhrase = "foo bar !!";
 var password = "MyPass";
 var wrongPassword = "MyWrongPass";
-var aes = new Aes_1.AES();
+var aes = new AES();
 describe("Aes test", function () {
     it("Should encode and decode in 128 bits", function () {
         var encoded = aes.to128(originalPhrase, password);

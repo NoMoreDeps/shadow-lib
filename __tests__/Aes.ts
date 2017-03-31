@@ -1,4 +1,5 @@
-import {AES} from "../Crypto/Aes";
+import * as ShadowLib from "../Index";
+import AES = ShadowLib.Crypto.AES;
 
 let originalPhrase = "foo bar !!";
 let password = "MyPass";
