@@ -7,7 +7,7 @@
         "declaration": true,
         "rootDir": "./",
         "outDir": "./bin",
-        "pretty": true
+        "pretty": false
     },
     "exclude": [
         "node_modules",

@@ -1,6 +1,6 @@
 {
   "name": "shadow-lib",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "Helpers for shadow developments",
   "main":"bin/Index",
   "files": [
@@ -9,6 +9,7 @@
     "bin/Crypto",
     "bin/Event"
   ],
+  "types": "bin",
   "scripts": {
     "pretest":"tsc",
     "test": "jest --verbose"

@@ -1,19 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Guid_1 = require("./Text/Guid");
-var Emitter_1 = require("./Event/Emitter");
-var Aes_1 = require("./Crypto/Aes");
-var Crypto;
-(function (Crypto) {
-    Crypto.AES = Aes_1.AES;
-})(Crypto = exports.Crypto || (exports.Crypto = {}));
-;
-var Text;
-(function (Text) {
-    Text.Guid = Guid_1.Guid;
-})(Text = exports.Text || (exports.Text = {}));
-var Event;
-(function (Event) {
-    Event.Emitter = Emitter_1.Emitter;
-})(Event = exports.Event || (exports.Event = {}));
+var Crypto = require("./Crypto/Aes");
+exports.Crypto = Crypto;
+var Text = require("./Text/Guid");
+exports.Text = Text;
+var Event = require("./Event/Emitter");
+exports.Event = Event;
 //# sourceMappingURL=Index.js.map
