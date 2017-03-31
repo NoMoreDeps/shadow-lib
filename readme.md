@@ -14,7 +14,8 @@ Shadow Lib package contains usefull standalone helpers used in all shadow develo
 /**
 * Import the package
 */
-import {AES} from "shadow-lib/Crypto/Aes";
+import * as ShadowLib from "shadow-lib";
+import AES = ShadowLib.Crypto.AES;
 
 // Instanciate the AES class
 let crypto = new AES();
@@ -40,7 +41,8 @@ let uncrypted128BitText = crypto.from128(encrypted128BitText, password);
 /**
  * Import the package
  */
-import {Guid} from "shadow-lib/Text/Guid";
+import * as ShadowLib from "shadow-lib";
+import Guid = ShadowLib.Text.Guid;
 
 // Instanciate a new Guid object
 let guid = new Guid();
@@ -60,7 +62,8 @@ let str2 = Guid.getGuid();
 /**
  * Import the package
  */
-import {Emitter} from "shadow-lib/Event/Emitter";
+import * as ShadowLib from "shadow-lib";
+import Guid = ShadowLib.Event.Emitter;
 
 // Instanciate an emitter
 let emitter = new Emitter();
