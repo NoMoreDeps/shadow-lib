@@ -16,6 +16,20 @@ describe("Test Emitter", function () {
         em.emit("TEST", "1");
         em.emit("TEST", "2");
     });
+    it("Should work same for each registered handler", function () {
+        var em = new Emitter();
+        var idx = 0;
+        em.on("Hello", function (data) {
+            expect(data).toEqual("Kitty");
+            idx++;
+        });
+        em.on("Hello", function (data) {
+            expect(data).toEqual("Kitty");
+            idx++;
+        });
+        em.emit("Hello", "Kitty");
+        expect(idx).toEqual(2);
+    });
     it("Should not receive event after unregistering it", function () {
         var em = new Emitter();
         var tab = ["1", "2"];

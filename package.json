@@ -1,6 +1,6 @@
 {
   "name": "shadow-lib",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Helpers for shadow developments",
   "main":"bin/Index",
   "files": [
@@ -12,7 +12,7 @@
   "types": "bin",
   "scripts": {
     "pretest":"tsc",
-    "test": "jest --verbose"
+    "test": "jest --coverage --verbose"
   },
   "repository": {
     "type": "git",

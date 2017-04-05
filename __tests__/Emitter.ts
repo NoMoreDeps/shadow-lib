@@ -19,6 +19,25 @@ describe("Test Emitter", () => {
     em.emit("TEST", "2");
   });
 
+  it("Should work same for each registered handler", () => {
+    let em = new Emitter();
+    let idx = 0;
+    
+    em.on("Hello", (data) => {
+      expect(data).toEqual("Kitty");
+      idx++;
+    });
+
+    em.on("Hello", (data) => {
+      expect(data).toEqual("Kitty");
+      idx++;      
+    });
+
+    em.emit("Hello", "Kitty");
+
+    expect(idx).toEqual(2);
+  });
+
   it("Should not receive event after unregistering it", () => {
     let em = new Emitter();
     let tab = ["1", "2"];
