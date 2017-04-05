@@ -1,12 +1,11 @@
 {
   "name": "shadow-lib",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Helpers for shadow developments",
   "main":"bin/Index",
   "files": [
     "bin",
     "bin/Text",
-    "bin/Crypto",
     "bin/Event"
   ],
   "types": "bin",
