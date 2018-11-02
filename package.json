@@ -1,30 +1,41 @@
 {
-  "name": "shadow-lib",
-  "version": "1.0.16",
-  "description": "Helpers for shadow developments",
-  "main":"bin/Index",
-  "files": [
-    "bin",
-    "bin/Text",
-    "bin/Event"
-  ],
-  "types": "bin",
-  "scripts": {
-    "pretest":"tsc",
-    "test": "jest --coverage --verbose"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+http://labs.beewix.com/beewix-public/shadow-lib.git"
-  },
-  "author": "François Skorzec",
-  "license": "MIT",
-  "bugs": {
-    "url": "http://labs.beewix.com/beewix-public/shadow-lib/issues"
-  },
-  "homepage": "http://labs.beewix.com/beewix-public/shadow-lib",
+  "name"       : "shadow-lib"                                 ,
+  "version"    : "1.0.0"                                      ,
+  "main"       : "index.js"                                   ,
+  "repository" : "https://github.com/fskorzec/shadow-lib.git" ,
+  "author"     : "Skorzec francois <fskorzec@outlook.com>"    ,
+  "license"    : "MIT"                                        ,
   "devDependencies": {
-    "@types/jest": "^15.1.1",
-    "jest": "^15.1.1"
+    "ts-jest"     : "^23.10.4" ,
+    "@types/jest" : "^23.3.9"  ,
+    "jest"        : "^23.6.0"  ,
+    "typescript": "^3.1.6"
+  },
+  "scripts": {
+    "test" : "jest --coverage"          
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverageFrom": [
+      "**/*.ts"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json",
+        "skipBabel": true
+      }
+    },
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "/__tests__/Tests/.*$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

@@ -1,4 +1,4 @@
-/**
+  /**
  * The MIT License (MIT)
  * Copyright (c) <2016> <Beewix>
  * Author <François Skorzec>
@@ -17,7 +17,7 @@
  */
 
 /**
- * Guid implementation base on Random generation (RFC V4)
+ * Guid implementation based on Random generation (RFC V4)
  * @class Guid
  */
 export class Guid {
@@ -28,42 +28,55 @@ export class Guid {
    * @field {any} _Guid_
    */
   protected _Guid_: {
-    toString : string       ;
-    part1    : number       ;
-    part2    : number       ;
-    part3    : number       ;
-    part4    : number       ;
-    part5    : number       ;
-    part6    : Array<number>;
+    toString : string ;
+    part1    : number ;
+    part2    : number ;
+    part3    : number ;
+    part4    : number ;
+    part5    : number ;
   };
 
-  /**
-   * Init method
-   * @scope {protected}
-   * @method _Guid_Init
-   * @return {void}
-   */
-  protected _Guid_Init(): void {
-    let gen = (): number => {
-      return ((1 + Math.random()) * 0x10000) >> 0;
-    };
-
-    this._Guid_ = {
-      part1: gen(),
-      part2: gen(),
-      part3: gen(),
-      part4: gen(),
-      part5: gen(),
-      part6: [gen(), gen(), gen()],
-      toString: ""
-    };
+  protected static generate2bytesNumber(): [number, string] {
+    const res = Math.round((Math.random() * 0xFFFF));
+    return [res, Guid.pad(res.toString(16), 4)];
   }
 
+  protected static generate4bytesNumber(): [number, string] {
+    const res = Math.round((Math.random() * 0xFFFFFFFF));
+    return [res, Guid.pad(res.toString(16), 8)];
+  }
+
+  protected static generate6bytesNumber(): [number, string] {
+    const res = Math.round((Math.random() * 0xFFFFFFFFFFFF));
+    return [res, Guid.pad(res.toString(16), 12)];
+  }
+
+  protected static pad(txt: string, size: number) {
+    var pad = "";
+    for(let i=0; i<size; i++) {
+      pad += "0";
+    }
+
+    return (pad + txt).substr(-size);
+  }
   /**
    * @constructor
    */
   constructor() {
-    this._Guid_Init();
+    const [part1, strPart1] = Guid.generate4bytesNumber() ;
+    const [part2, strPart2] = Guid.generate2bytesNumber() ;
+    const [part3, strPart3] = Guid.generate2bytesNumber() ;
+    const [part4, strPart4] = Guid.generate2bytesNumber() ;
+    const [part5, strPart5] = Guid.generate6bytesNumber() ;
+
+    this._Guid_ = {
+      part1 : part1 ,
+      part2 : part2 ,
+      part3 : part3 ,
+      part4 : part4 ,
+      part5 : part5 ,
+      toString: `${strPart1}-${strPart2}-${strPart3}-${strPart4}-${strPart5}`
+    };
   }
 
   /**
@@ -102,29 +115,11 @@ export class Guid {
   }
 
   /**
-   * Gets the part 6
-   */
-  get part6(): Array<number> {
-    return this._Guid_.part6;
-  }
-
-  /**
    * Gets a string representation of the Guid
    * @method toString
    * @return {string}
    */
   toString() {
-    if (this._Guid_.toString.length === 0) {
-      this._Guid_.toString = this._Guid_.part1.toString(16).substring(1) + "-" +
-        this._Guid_.part2.toString(16).substring(1) + "-" +
-        this._Guid_.part3.toString(16).substring(1) + "-" +
-        this._Guid_.part4.toString(16).substring(1) + "-" +
-        this._Guid_.part5.toString(16).substring(1) + "-" +
-        this._Guid_.part6[0].toString(16).substring(1)
-        + this._Guid_.part6[1].toString(16).substring(1)
-        + this._Guid_.part6[2].toString(16).substring(1)
-        ;
-    }
     return this._Guid_.toString;
   }
 
@@ -135,10 +130,6 @@ export class Guid {
    * @return {string}
    */
   static getGuid(): string {
-    let gen = (): string => {
-      return (((1 + Math.random()) * 0x10000) >> 0).toString(16).substring(1);
-    };
-
-    return `${gen()}-${gen()}-${gen()}-${gen()}-${gen()}-${gen() + gen() + gen()}`;
+    return new Guid().toString();
   }
 }
