@@ -307,7 +307,14 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
 
     this.pools.forEach(poolRef => {
       for (const evt in poolRef) {
-        if (typeof evt === "string" && eventName.startsWith(evt)) {
+        const sourceName = evt.split(this._separator);
+        const destName = eventName.split(this._separator);
+
+        while(destName.length > 0 && sourceName.length < destName.length) {
+          destName.pop();
+        }
+
+        if (typeof evt === "string" && sourceName.join() === destName.join()) {
           poolRef[evt].forEach(fct => fct.callback(data));
         }
       }
@@ -332,7 +339,14 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
     setTimeout(() => {
       this.pools.forEach(poolRef => {
         for (const evt in poolRef) {
-          if (typeof evt === "string" && eventName.startsWith(evt)) {
+          const sourceName = evt.split(this._separator);
+          const destName = eventName.split(this._separator);
+
+          while(destName.length > 0 && sourceName.length < destName.length) {
+            destName.pop();
+          }
+  
+          if (typeof evt === "string" && sourceName.join() === destName.join()) {
             poolRef[evt].forEach(fct => fct.callback(data));
           }
         }
