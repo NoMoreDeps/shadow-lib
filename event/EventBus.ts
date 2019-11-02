@@ -315,7 +315,10 @@ ${$this._depthLevel > 1 ? "separated by '" + $this._separator + "'" : ""}`;
         }
 
         if (typeof evt === "string" && sourceName.join() === destName.join()) {
-          poolRef[evt].forEach(fct => fct.callback(data));
+          poolRef[evt].forEach(fct => {
+            eventName !== "allEvents" && this.emit("allEvents", { eventName: `callback.${eventName}`, data: fct.id });
+            fct.callback(data)
+          });
         }
       }
     });
